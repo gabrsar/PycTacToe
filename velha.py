@@ -38,6 +38,8 @@ def desenhaTabuleiro(tabuleiro):
     print()
     print("      ",end="")
 
+    traco = "+" + ("---+"*len(tabuleiro[0]))
+
     # Imprime as colunas...
     for (c,coluna) in enumerate(tabuleiro[0]):
         print("  ",c+1," ",end="",sep="")
@@ -47,7 +49,7 @@ def desenhaTabuleiro(tabuleiro):
     # Imprime o resto do tabuleiro com o número das linhas...
     for (l,linha) in enumerate(tabuleiro):
 
-        print("      +---+---+---+")
+        print("     ",traco)
         print("   ",l+1,"  ",sep="",end="")
 
         for (c,elemento) in enumerate(linha):
@@ -55,7 +57,7 @@ def desenhaTabuleiro(tabuleiro):
         print("|")
 
     # Final do tabuleiro.
-    print("      +---+---+---+")
+    print("     ",traco)
 
 
 
@@ -137,7 +139,7 @@ def testarVitoria(a,t):
         for (j,coluna) in enumerate(linha):
             if t[i][j] == a:
                 pontos=pontos+1
-                if pontos==3:
+                if pontos==tamanho:
                     return True
 
     # Busca vencedor nas colunas
@@ -147,7 +149,7 @@ def testarVitoria(a,t):
             # Abuso de mapeamento, mas é python, então a zona está autorizada
             if t[j][i] == a:
                 pontos=pontos+1
-                if pontos==3:
+                if pontos==tamanho:
                     return True
 
     # Busca vencedor na diagonal principal
@@ -175,7 +177,7 @@ def testarVitoria(a,t):
 
 def main():
         
-    linhas=colunas=3
+    linhas=colunas=4
 
     tabuleiro = [[" " for coluna in range(colunas)] for linha in range(linhas)]
 
