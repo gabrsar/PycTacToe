@@ -21,12 +21,41 @@
 # Agradecimentos: Ao careca do Jabuka que me amolou muito, e ao Tesouro que me 
 # motivou :)
 #
+#
+# Versão 1 - 30/09/2014
+#   Versão funcional para jogo com dois jogadores HUMANOS no mesmo computador
+# Versão 2 - 20/10/2014
+#   Versão quase funcional para jogo com dois jogadores HUMANOS via internet
+#   (AINDA NÃO CONCLUIDO!)
+#
 #===============================================================================
 
 
 import os
 import sys, traceback
 
+
+from enum import Enum
+
+class Sinais(Enum):
+    INVALID_POSITION = 0,
+    USED_POSITION = 1,
+    VICTORY = 2,
+    DRAW = 3,
+    CONTINUE_GAME = 4,
+    GAME_ENDED = 5,
+    OK = 6
+
+from enum import Enum
+
+class Sinais(Enum):
+    INVALID_POSITION = 0,
+    USED_POSITION = 1,
+    VICTORY = 2,
+    DRAW = 3,
+    CONTINUE_GAME = 4,
+    GAME_ENDED = 5,
+    OK = 6
 
 
 def desenhaTabuleiro(tabuleiro):
@@ -60,15 +89,40 @@ def desenhaTabuleiro(tabuleiro):
     print("     ",traco)
 
 
-
 #===============================================================================
-def obterCoordenadasDeJogada(jogador):
+def posicaoEstaLivre(tabuleiro,linha,coluna):
+    if tabuleiro[linha][coluna] != " ":
+        return Sinais.USED_POSITION
+    return Sinais.OK
+       
+def testarCoordenadas(tabuleiro,linha,coluna): 
+    linhas=len(tabuleiro)
+    colunas=len(tabuleiro[0])
+
+    if linha >= 0 and linha < linhas:
+        if coluna >= 0 and coluna < colunas :
+            return posicaoEstaLivre(tabuleiro,linha,coluna)
+
+    return Sinais.INVALID_POSITION
+
+
+def obterCoordenadasDeJogada(tabuleiro,jogador):
     while True:
         try:
+            print("")
             linha = int(input("Jogador "+jogador+" entre com a linha:"))
             coluna = int(input("Jogador "+jogador+" entre com a coluna:"))
 
-            return linha,coluna
+            linha = linha - 1
+            coluna = coluna - 1            
+
+            resultado = testarCoordenadas(tabuleiro,linha,coluna)
+            if resultado == Sinais.OK:
+                return linha,coluna
+            elif resultado == Sinais.INVALID_POSITION:
+                print("Posição inválida!")
+            elif resultado == Sinais.USED_POSITION:
+                print("Posição já foi utilizada!")
 
         except KeyboardInterrupt:
             print()
@@ -78,6 +132,7 @@ def obterCoordenadasDeJogada(jogador):
             print("Por favor, insira números válidos!")
             continue
 
+
 def executarJogada(jogador,tabuleiro):
 
     """ Executa uma jogada com o jogador especificado.
@@ -85,34 +140,12 @@ def executarJogada(jogador,tabuleiro):
     """
     erro = True
 
-    while erro:
-        print()
-        linha,coluna = obterCoordenadasDeJogada(jogador)
 
-        linha = linha - 1
-        coluna = coluna - 1
-        linhas=len(tabuleiro)
-        colunas=len(tabuleiro[0])
+    print()
+    linha,coluna = obterCoordenadasDeJogada(tabuleiro,jogador)
+    # Tudo ok, então realiza a jogada...
+    tabuleiro[linha][coluna] = jogador
 
-        if linha >= 0 and linha < linhas:
-            if coluna >= 0 and coluna < colunas :
-                erro = False
-
-        if (erro):
-            print("A posição entrada é inválida!")
-            print("Por favor, tente novamente.")
-            continue
-
-        
-        if tabuleiro[linha][coluna] != " ":
-            erro=True
-            print("Essa posição já está ocupada!")
-            print("Por favor, tente novamente.")
-            continue
-        else:
-
-            # Tudo ok, então realiza a jogada...
-            tabuleiro[linha][coluna] = jogador
 
 
 
@@ -179,7 +212,7 @@ def testarVitoria(a,t):
 
 
 def main():
-        
+
     linhas=colunas=3
 
     tabuleiro = [[" " for coluna in range(colunas)] for linha in range(linhas)]
