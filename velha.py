@@ -62,6 +62,21 @@ def desenhaTabuleiro(tabuleiro):
 
 
 #===============================================================================
+def obterCoordenadasDeJogada(jogador):
+    while True:
+        try:
+            linha = int(input("Jogador "+jogador+" entre com a linha:"))
+            coluna = int(input("Jogador "+jogador+" entre com a coluna:"))
+
+            return linha,coluna
+
+        except KeyboardInterrupt:
+            print()
+            print("Jogo abortado!")
+            sys.exit(0)
+        except:
+            print("Por favor, insira números válidos!")
+            continue
 
 def executarJogada(jogador,tabuleiro):
 
@@ -72,19 +87,7 @@ def executarJogada(jogador,tabuleiro):
 
     while erro:
         print()
-        linha=-1
-        coluna=-1
-        try:
-            linha = int(input("Jogador "+jogador+" entre com a linha:"))
-            coluna = int(input("Jogador "+jogador+" entre com a coluna:"))
-        except KeyboardInterrupt:
-            print()
-            print("Jogo abortado!")
-            sys.exit(0)
-        except:
-            print("Por favor, insira números válidos!")
-            continue
-
+        linha,coluna = obterCoordenadasDeJogada(jogador)
 
         linha = linha - 1
         coluna = coluna - 1
@@ -177,7 +180,7 @@ def testarVitoria(a,t):
 
 def main():
         
-    linhas=colunas=4
+    linhas=colunas=3
 
     tabuleiro = [[" " for coluna in range(colunas)] for linha in range(linhas)]
 
