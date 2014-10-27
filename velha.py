@@ -152,6 +152,7 @@ def executarJogada(jogador,tabuleiro):
 def limparTela():
     """ Função simples para limpar a tela utilizando caracteres de controle """
     print (chr(27) + "[2J")
+    print (chr(27) + "[0;0H")
 
 def testarVitoria(a,t):
     """ Função que busca vitória no tabuleiro para o jogador especificado.
